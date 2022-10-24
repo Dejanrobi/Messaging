@@ -20,6 +20,7 @@ const firebaseApp = initializeApp({
 
 const auth = getAuth(firebaseApp);
 
+const tokenBox = document.querySelector(".currentToken");
 //Initializing firebase Cloud Messaging
 
 // onAuthStateChanged(auth, (user) => {
@@ -46,6 +47,7 @@ function requestPermission() {
       }).then((currentToken) => {
         if (currentToken) {
           console.log("Current Token: ", currentToken);
+          tokenBox.innerHTML = currentToken;
         } else {
           console.log("Cannot get token!!");
         }
