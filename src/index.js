@@ -20,42 +20,31 @@ const firebaseApp = initializeApp({
 
 const auth = getAuth(firebaseApp);
 
-const tokenBox = document.querySelector(".currentToken");
-//Initializing firebase Cloud Messaging
+//Initialing getMessage
+const messaging = getMessaging(firebaseApp);
 
-// onAuthStateChanged(auth, (user) => {
-//   if (user != null) {
-//     console.log("Logged in!");
-//   } else {
-//     console.log("No User");
-//   }
-// });
+//Askin permission from the user to send notifications.
 
-//Adding the public key generated from the console
-
-//Requesting notification permission
 function requestPermission() {
-  console.log("Requesting permission ..........");
-  Notification.requestPermission().then((Permission) => {
-    if (Permission === "granted") {
-      console.log("Notification Permission granted");
+  console.log("Requesting permission.......");
+  Notification.requestPermission().then((permission) => {
+    if (permission === "granted") {
+      console.log("Notification permission granted");
 
-      const messaging = getMessaging(firebaseApp);
+      //Retrieving the current token after the permission has been granted.
       getToken(messaging, {
         vapidKey:
           "BM5l_sqSSTymRFx6r3GAkNPrQnUGym-8yDRf5VdLduSJrQPDbOsjXBmHoAew9lB5y_R30L3t0T624iQxSAgmVgs",
       }).then((currentToken) => {
         if (currentToken) {
-          console.log("Current Token: ", currentToken);
-          tokenBox.innerHTML = currentToken;
+          console.log("CurrentToken: ", currentToken);
         } else {
-          console.log("Cannot get token!!");
+          console.log("Error in retrieving the current token");
         }
       });
-    } else {
-      console.log("Do not have permission!!!");
     }
   });
 }
 
+//calling the function
 requestPermission();
