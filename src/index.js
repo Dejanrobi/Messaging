@@ -21,7 +21,6 @@ const firebaseApp = initializeApp({
 const auth = getAuth(firebaseApp);
 
 //Initializing firebase Cloud Messaging
-const messaging = getMessaging(firebaseApp);
 
 // onAuthStateChanged(auth, (user) => {
 //   if (user != null) {
@@ -32,15 +31,29 @@ const messaging = getMessaging(firebaseApp);
 // });
 
 //Adding the public key generated from the console
-getToken(messaging, {
-  vapidKey:
-    "BM5l_sqSSTymRFx6r3GAkNPrQnUGym-8yDRf5VdLduSJrQPDbOsjXBmHoAew9lB5y_R30L3t0T624iQxSAgmVgs",
-}).then((currentToken) => {
-  if (currentToken) {
-    console.log("CurrentToken: ", currentToken);
-  } else {
-    console.log("Cannot get Token");
-  }
-});
 
 //Requesting notification permission
+function requestPermission() {
+  console.log("Requesting permission ..........");
+  Notification.requestPermission().then((Permission) => {
+    if (Permission === "granted") {
+      console.log("Notification Permission granted");
+
+      const messaging = getMessaging(firebaseApp);
+      getToken(messaging, {
+        vapidKey:
+          "BM5l_sqSSTymRFx6r3GAkNPrQnUGym-8yDRf5VdLduSJrQPDbOsjXBmHoAew9lB5y_R30L3t0T624iQxSAgmVgs",
+      }).then((currentToken) => {
+        if (currentToken) {
+          console.log("Current Token: ", currentToken);
+        } else {
+          console.log("Cannot get token!!");
+        }
+      });
+    } else {
+      console.log("Do not have permission!!!");
+    }
+  });
+}
+
+requestPermission();
